@@ -1,0 +1,40 @@
+# Compiled object files and interface files
+*.o
+*.hi
+*.chi
+*.chs.h
+
+# Cabal build artifacts
+dist/
+dist-newstyle/
+
+# Stack build artifacts
+.stack-work/
+
+# GHC environment files
+.ghc.environment.*
+
+# Haskell Language Server / GHC IDE artifacts
+.hie/
+.hie-bios/
+.hie-bios-cache/
+.hie-bios-output/
+.hie-bios-log/
+.hie-bios-temp/
+.hie-bios-test/
+
+# Editor/IDE files
+*.swp
+*.swo
+*.tmp
+*.bak
+*~
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Binary executables
+*.exe
+*.out
+*.app
