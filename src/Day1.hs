@@ -14,13 +14,10 @@ run = do
   putStrLn ("Part2: " ++ show (part2 lns))
 
 part1 :: [String] -> Int
-part1 ls =
-  case evPositions ls of
-    Just posns -> length (filter (== 0) posns)
-    Nothing -> 0
+part1 = maybe 0 (length . filter (==0)) . evPositions
 
 part2 :: [String] -> Int
-part2 ls = sum (rotationsMapMaybe (rotations (mapMaybe parseLine ls)))
+part2 = sum . map (fromMaybe 0) . rotations . mapMaybe parseLine
 
 rotationsMapMaybe :: [Maybe Int] -> [Int]
 rotationsMapMaybe = map (fromMaybe 0)

@@ -58,7 +58,7 @@ library
     import:           warnings
 
     -- Modules exported by the library.
-    exposed-modules:  MyLib, Day1
+    exposed-modules:  MyLib, Day1, Day2
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -68,6 +68,7 @@ library
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.3.0
+                    , split
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -123,7 +124,8 @@ test-suite aoc2025-haskell-test
 
     -- Test dependencies.
     build-depends:
-        base ^>=4.18.3.0,
-        HUnit,
-        aoc2025-haskell
+        base ^>=4.18.3.0
+        , HUnit
+        , aoc2025-haskell
+        , split
         
