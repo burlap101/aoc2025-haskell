@@ -1,13 +1,15 @@
--- module Main (main) where
+module Main (main) where
 
 import Data.List.Split (splitOn)
 import qualified Day1
 import qualified Day2
+import qualified Day3
 import Test.HUnit
 
 tests :: Test
 testsDay1 :: Test
 testsDay2 :: Test
+testsDay3 :: Test
 combos :: [Day1.Combo]
 combos = [Day1.Combo 'R' 10, Day1.Combo 'L' 5, Day1.Combo 'R' 45]
 
@@ -97,7 +99,20 @@ testsDay2 =
         assertEqual "part2 on day2_test.txt" 4174379265 result
     ]
 
-tests = TestList [testsDay1, testsDay2]
+testsDay3 = 
+  TestList
+    [
+        "maxNJoltage 12 987654321111111" ~: Day3.maxNJoltage 12 [9,8,7,6,5,4,3,2,1,1,1,1,1,1,1] ~?= 987654321111
+      , "maxNJoltage 12 811111111111119" ~: Day3.maxNJoltage 12 [8,1,1,1,1,1,1,1,1,1,1,1,1,1,9] ~?= 811111111119
+      , "nDigit 1 [1, 1, 1, 9]" ~: Day3.nDigit 1 [1, 1, 1, 9] ~?= 9
+      , TestCase $ do
+          input <- readFile "inputs/day3_test.txt"
+          let lns = lines input
+          let result = Day3.part2 lns
+          assertEqual "part2 on day3_test.txt" 3121910778619 result
+    ]
+
+tests = TestList [testsDay1, testsDay2, testsDay3]
 
 main :: IO ()
 main = runTestTT tests >>= print
