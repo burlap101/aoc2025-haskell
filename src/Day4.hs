@@ -15,6 +15,14 @@ run = do
 part1 :: [String] -> Int
 part1 lns = length $ filter (<4) $ keyScores (locToRolls lns)
 
+-- | Maps locations on the floor to it coordinate and whether
+-- it contains a roll
+--
+-- Arguments 
+-- * lines from input data
+--
+-- Returns
+-- * Map of coordinate with value of 1 if contains a roll else 0
 locToRolls :: [String] -> HM.HashMap String Int
 locToRolls = go 1 HM.empty
   where
@@ -25,6 +33,13 @@ locToRolls = go 1 HM.empty
           hm' = HM.union (HM.fromList mlist) hm
        in go (row + 1) hm' lns
 
+-- | Determines all potential surrounding keys for the floor layout
+--
+-- Arguments
+-- * @s@: key at center
+--
+-- Returns
+-- * Potential surrounding keys (could be non existant on edges)
 surroundingKeys :: String -> [String]
 surroundingKeys s = do
   let strs = splitOn "-" s
@@ -35,8 +50,22 @@ surroundingKeys s = do
   filter (/=s) [show i ++ "-" ++ show j | i <- [m - 1 .. m + 1], j <- [n - 1 .. n + 1]]
 
 -- | Produces a score for each key
+--
+-- Arguments
+-- * @k@ coordinate key of the location on the floor
+-- * @hm@ hashmap of the floorplan
+--
+-- Returns
+-- * Sum of all surrounding locations
 keyScore :: String -> HM.HashMap String Int -> Int
 keyScore k hm = sum $ catMaybes [HM.lookup k' hm | k' <- surroundingKeys k]
 
+-- | Produces a list of all scores for the floor
+--
+-- Arguments
+-- * @hm@ floor plan map
+--
+-- Returns
+-- list of sum of all surrounding locations for each coordinate
 keyScores :: HM.HashMap String Int -> [Int]
 keyScores hm = [ keyScore k hm | k <- HM.keys hm, (/=0)(HM.findWithDefault 0 k hm)]
