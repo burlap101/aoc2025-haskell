@@ -9,16 +9,18 @@ run = do
   input <- readFile "inputs/day4.txt"
   let lns = lines input
   putStrLn ("Part1: " ++ show (part1 lns))
-
---  putStrLn ("Part2: " ++ show (part2 lns))
+  putStrLn ("Part2: " ++ show (part2 lns))
 
 part1 :: [String] -> Int
-part1 lns = length $ filter (<4) $ keyScores (locToRolls lns)
+part1 lns = length $ filter (< 4) $ HM.elems $ keyScores (locToRolls lns)
+
+part2 :: [String] -> Int
+part2 lns = sum $ map snd $ removalSteps (locToRolls lns) []
 
 -- | Maps locations on the floor to it coordinate and whether
 -- it contains a roll
 --
--- Arguments 
+-- Arguments
 -- * lines from input data
 --
 -- Returns
@@ -44,10 +46,10 @@ surroundingKeys :: String -> [String]
 surroundingKeys s = do
   let strs = splitOn "-" s
       mstr = head strs
-      nstr = strs!!1
+      nstr = strs !! 1
       n = read nstr :: Int
       m = read mstr :: Int
-  filter (/=s) [show i ++ "-" ++ show j | i <- [m - 1 .. m + 1], j <- [n - 1 .. n + 1]]
+  filter (/= s) [show i ++ "-" ++ show j | i <- [m - 1 .. m + 1], j <- [n - 1 .. n + 1]]
 
 -- | Produces a score for each key
 --
@@ -60,12 +62,61 @@ surroundingKeys s = do
 keyScore :: String -> HM.HashMap String Int -> Int
 keyScore k hm = sum $ catMaybes [HM.lookup k' hm | k' <- surroundingKeys k]
 
--- | Produces a list of all scores for the floor
+-- | Produces a hashmap of all scores for the floor
 --
 -- Arguments
 -- * @hm@ floor plan map
 --
 -- Returns
--- list of sum of all surrounding locations for each coordinate
-keyScores :: HM.HashMap String Int -> [Int]
-keyScores hm = [ keyScore k hm | k <- HM.keys hm, (/=0)(HM.findWithDefault 0 k hm)]
+-- * hashmap of sum of all surrounding locations for each coordinate
+keyScores :: HM.HashMap String Int -> HM.HashMap String Int
+keyScores hm = HM.fromList [(k, keyScore k hm) | k <- HM.keys hm, (/= 0) (HM.findWithDefault 0 k hm)]
+
+-- | Takes a scored floor and determines the keys removable
+-- 
+-- Arguments
+-- * @hm@ scored floor plan
+--
+-- Returns
+-- * List of keys that are removable
+removableKeys :: HM.HashMap String Int -> [String]
+removableKeys hm = HM.keys $ HM.filter (< 4) hm
+
+-- | Removes the keys and resets the floor map
+--
+-- Arguments
+-- * @ks@ keys to remove
+-- * @hm@ floor map (unscored)
+--
+-- Returns
+-- * floor map with removed locations
+removeRolls :: [String] -> HM.HashMap String Int -> HM.HashMap String Int
+removeRolls ks = HM.mapWithKey (\k v -> if k `elem` ks then 0 else v)
+
+-- | Produces tuple with resulting floor map and how many
+-- rolls were removed
+--
+-- Arguments
+-- * @hm@ unscored floor map
+--
+-- Returns
+-- * tuple with resulting unscored floor map and count of keys removed
+removeResult :: HM.HashMap String Int -> (HM.HashMap String Int, Int)
+removeResult hm = do
+  let scoredHM = keyScores hm
+  let rks = removableKeys scoredHM
+  (removeRolls rks hm, length rks)
+
+-- | Recursively moves through map for all roll removals
+--
+-- Arguments
+-- * @hm@ floor map (unscored)
+-- * @acc@ accumulated results
+--
+-- Returns
+-- * List of tupled results from removeResult
+removalSteps :: HM.HashMap String Int -> [(HM.HashMap String Int, Int)] -> [(HM.HashMap String Int, Int)]
+removalSteps _ ((_, 0) : xs) = xs  -- Don't really need the last result
+removalSteps hm acc = do
+  let (resMap, i) = removeResult hm
+  removalSteps resMap ((resMap, i):acc)

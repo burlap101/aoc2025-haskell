@@ -133,4 +133,5 @@ test-suite aoc2025-haskell-test
         , HUnit
         , aoc2025-haskell
         , split
+        , unordered-containers
         
