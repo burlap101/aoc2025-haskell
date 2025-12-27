@@ -7,6 +7,7 @@ import qualified Day2
 import qualified Day3
 import qualified Day4
 import qualified Day5
+import qualified Day6
 import Test.HUnit
 
 tests :: Test
@@ -15,6 +16,7 @@ testsDay2 :: Test
 testsDay3 :: Test
 testsDay4 :: Test
 testsDay5 :: Test
+testsDay6 :: Test
 combos :: [Day1.Combo]
 combos = [Day1.Combo 'R' 10, Day1.Combo 'L' 5, Day1.Combo 'R' 45]
 
@@ -156,12 +158,25 @@ testsDay5 =
       "expandRange (5, 10) [(5, 10), (5, 10), (7, 15)]" ~: Day5.expandRange (5, 10) [(5, 10), (5, 10), (7, 15)] ~?= reverse [(5, 15), (5, 10), (5, 10)],
       "dedupRanges [(1, 10), (3,6), (11,15), (12,13)]" ~: Day5.dedupRanges [(1, 10), (3, 6), (11, 15), (12, 13)] ~?= [(1, 10), (11, 15)],
       "isSubRange [(1, 10), (3,6), (11,15), (12,13)]" ~: Day5.dedupRanges [(1, 10), (3, 6), (11, 15), (12, 13)] ~?= [(1, 10), (11, 15)],
-      "expandRanges [(1, 5), (4, 6), (7, 8)]" ~: Day5.expandRanges [(1,5),(4,6),(7,8)] ~?= [(1,5),(1,6),(7,8)],
+      "expandRanges [(1, 5), (4, 6), (7, 8)]" ~: Day5.expandRanges [(1, 5), (4, 6), (7, 8)] ~?= [(1, 5), (1, 6), (7, 8)],
       TestCase $ do
         input <- readFile "inputs/day5_test.txt"
         let lns = lines input
         let result = Day5.part2 lns
         assertEqual "part2 on day5_test.txt" 14 result
+    ]
+
+testsDay6 =
+  TestList
+    [ "gridSizes [[1, 2, 33], [11, 22, 333], [111, 2, 3333]]" ~: Day6.gridSizes [[1, 2, 33], [11, 22, 333], [111, 2, 3333]] ~?= [3, 2, 4],
+      "charGrid 2 [\"11 222 3333\", \" 1 22  33  \", \"1  2    3  \"]" ~: Day6.charGrid 2 ["11 222 3333", " 1 22  33  ", "1  2    3  "] ~?= (["11", " 1", "1 "], ["222 3333", "22  33  ", "2    3  "]),
+      "numGrid [64, 23, 314]" ~: Day6.numGrid ["64 ", "23 ", "314"] ~?= [623, 431, 4],
+      "charGrids [\"11 222 3333\", \" 1 22  33  \", \"1  2    3  \"]" ~: Day6.charGrids ["11 222 3333", " 1 22  33  ", "1  2    3  "] ~?= [["11", " 1", "1 "], ["222", "22 ", "2  "], ["3333", "33  ", " 3  "]],
+      TestCase $ do
+        input <- readFile "inputs/day6_test.txt"
+        let lns = lines input
+        let result = Day6.part2 lns
+        assertEqual "part2 on day6_test.txt" 3263827 result
     ]
 
 tests =
@@ -170,7 +185,8 @@ tests =
       testsDay2,
       testsDay3,
       testsDay4,
-      testsDay5
+      testsDay5,
+      testsDay6
     ]
 
 main :: IO ()

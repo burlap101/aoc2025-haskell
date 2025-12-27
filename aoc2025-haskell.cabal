@@ -64,6 +64,7 @@ library
                     , Day3
                     , Day4
                     , Day5
+                    , Day6
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -75,6 +76,7 @@ library
     build-depends:    base ^>=4.18.3.0
                     , split
                     , unordered-containers
+                    , text
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -135,4 +137,4 @@ test-suite aoc2025-haskell-test
         , aoc2025-haskell
         , split
         , unordered-containers
-        
+        , text

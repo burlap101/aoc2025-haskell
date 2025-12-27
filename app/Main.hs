@@ -5,6 +5,7 @@ import qualified Day2
 import qualified Day3
 import qualified Day4
 import qualified Day5
+import qualified Day6
 
 import System.Environment (getArgs)
 
@@ -17,4 +18,5 @@ main = do
     ["3"] -> Day3.run
     ["4"] -> Day4.run
     ["5"] -> Day5.run
+    ["6"] -> Day6.run
     _     -> putStrLn "Usage: aoc2025 <day-number>"
