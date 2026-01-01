@@ -8,6 +8,7 @@ import qualified Day3
 import qualified Day4
 import qualified Day5
 import qualified Day6
+import qualified Day7
 import Test.HUnit
 
 tests :: Test
@@ -17,6 +18,7 @@ testsDay3 :: Test
 testsDay4 :: Test
 testsDay5 :: Test
 testsDay6 :: Test
+testsDay7 :: Test
 combos :: [Day1.Combo]
 combos = [Day1.Combo 'R' 10, Day1.Combo 'L' 5, Day1.Combo 'R' 45]
 
@@ -179,6 +181,24 @@ testsDay6 =
         assertEqual "part2 on day6_test.txt" 3263827 result
     ]
 
+manifold1 :: [String]
+manifold1 = ["...^...", ".......", "..^...^.."]
+
+testsDay7 =
+  TestList
+    [ "splitterLocs manifold1" ~: Day7.splitterLocs manifold1 ~?= [(2, 2), (2, 6), (0, 3)],
+      TestCase $ do
+        input <- readFile "inputs/day7_test.txt"
+        let lns = lines input
+        let result = Day7.part1 lns
+        assertEqual "part1 on day7_test.txt" 21 result,
+      TestCase $ do
+        input <- readFile "inputs/day7_test.txt"
+        let lns = lines input
+        let result = Day7.part2 lns
+        assertEqual "part2 on day7_test.txt" 40 result
+    ]
+
 tests =
   TestList
     [ testsDay1,
@@ -186,7 +206,8 @@ tests =
       testsDay3,
       testsDay4,
       testsDay5,
-      testsDay6
+      testsDay6,
+      testsDay7
     ]
 
 main :: IO ()
