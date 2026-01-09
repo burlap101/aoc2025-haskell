@@ -3,11 +3,8 @@ module Day7 where
 import qualified Data.HashMap.Strict as HM
 import qualified Data.HashSet as HS
 import Data.Hashable (Hashable)
-import Data.List (elemIndex, find, foldl', groupBy, sort, sortBy)
+import Data.List (elemIndex, find, groupBy, sort, sortBy)
 import Data.Maybe (catMaybes, fromMaybe)
-import Debug.Trace (trace)
-
-data Tree a = Node {loc :: a, children :: [Tree a]}
 
 run :: IO ()
 run = do
@@ -148,6 +145,11 @@ manageNodeScores ndscrs pos (Just x, Just y)
 --
 -- Arguments
 -- * @scored@ set of all nodes currently scored
+-- * @stk@ current stack with head the current node being split
+-- * @splts@ children splitters of current splitter
+--
+-- Returns
+-- * Resulting stack
 manageSplitStack :: (Eq a, Hashable a) => HS.HashSet a -> [a] -> (Maybe a, Maybe a) -> [a] 
 manageSplitStack _ [] _ = []
 manageSplitStack scored (x:xs) chn

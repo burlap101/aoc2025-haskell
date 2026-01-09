@@ -9,6 +9,7 @@ import qualified Day4
 import qualified Day5
 import qualified Day6
 import qualified Day7
+import qualified Day8
 import Test.HUnit
 
 tests :: Test
@@ -19,6 +20,11 @@ testsDay4 :: Test
 testsDay5 :: Test
 testsDay6 :: Test
 testsDay7 :: Test
+testsDay8 :: Test
+assertApproxEqual :: String -> Double -> Double -> Double -> Assertion
+assertApproxEqual msg eps expected actual =
+  assertBool msg (abs (expected - actual) <= eps)
+
 combos :: [Day1.Combo]
 combos = [Day1.Combo 'R' 10, Day1.Combo 'L' 5, Day1.Combo 'R' 45]
 
@@ -199,6 +205,39 @@ testsDay7 =
         assertEqual "part2 on day7_test.txt" 40 result
     ]
 
+tc1 :: [(Int, Int, Int)]
+tc1 = [(1, 1, 1), (2, 2, 2), (3, 3, 3)]
+
+tc2 :: [(Int, Int, Int)]
+tc2 = [(4, 4, 4), (5, 5, 5)]
+
+testccts :: [[(Int, Int, Int)]]
+testccts = [tc1, tc2]
+
+testsDay8 =
+  TestList
+    [ "junctionBox 3,22,123" ~: Day8.junctionBox "3,22,123" ~?= (3, 22, 123),
+      "manageCircuits tstccts ((1,2,3),(3,3,3))"
+        ~: Day8.manageCircuits testccts ((1, 2, 3), (3, 3, 3))
+        ~?= [(1, 2, 3) : tc1, tc2],
+      "distance correct" ~: assertApproxEqual "distance mismatch" 1e-6 328.1188809 (Day8.distance (431, 825, 988) (425, 690, 689)),
+      TestCase $ do
+        input <- readFile "inputs/day8_test.txt"
+        let lns = lines input
+        assertEqual "all pairs length" 190 (length (Day8.allPairDistances (Day8.junctionBoxes lns)))
+        assertEqual "ranked pairs length" 190 (length (Day8.rankedPairs (Day8.junctionBoxes lns)))
+        let result = Day8.part1 lns 10
+        assertEqual "part1 on day8_test.txt" 40 result,
+      TestCase $ do
+        input <- readFile "inputs/day8_test.txt"
+        let lns = lines input
+        let jbs = Day8.junctionBoxes lns
+        let jbprs = Day8.rankedPairs jbs
+        assertEqual "determineSingleCircuitPoint points" ((117, 168, 530), (216, 146, 977)) (Day8.determineSingleCircuitPoint jbprs jbs)
+        let result = Day8.part2 lns
+        assertEqual "part2 on day8_test.txt" 25272 result
+    ]
+
 tests =
   TestList
     [ testsDay1,
@@ -207,7 +246,8 @@ tests =
       testsDay4,
       testsDay5,
       testsDay6,
-      testsDay7
+      testsDay7,
+      testsDay8
     ]
 
 main :: IO ()
