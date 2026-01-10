@@ -10,6 +10,7 @@ import qualified Day5
 import qualified Day6
 import qualified Day7
 import qualified Day8
+import qualified Day9
 import Test.HUnit
 
 tests :: Test
@@ -21,6 +22,7 @@ testsDay5 :: Test
 testsDay6 :: Test
 testsDay7 :: Test
 testsDay8 :: Test
+testsDay9 :: Test
 assertApproxEqual :: String -> Double -> Double -> Double -> Assertion
 assertApproxEqual msg eps expected actual =
   assertBool msg (abs (expected - actual) <= eps)
@@ -238,6 +240,17 @@ testsDay8 =
         assertEqual "part2 on day8_test.txt" 25272 result
     ]
 
+testsDay9 =
+  TestList
+    [ 
+      "area (2,5) (11,1)" ~: Day9.area (2,5) (11,1) ~?= 50,
+      TestCase $ do
+        input <- readFile "inputs/day9_test.txt"
+        let lns = lines input
+        let result = Day9.part1 lns
+        assertEqual "part1 on day9_test.txt" 50 result
+    ]
+
 tests =
   TestList
     [ testsDay1,
@@ -247,7 +260,8 @@ tests =
       testsDay5,
       testsDay6,
       testsDay7,
-      testsDay8
+      testsDay8,
+      testsDay9
     ]
 
 main :: IO ()
